@@ -45,10 +45,10 @@ function Guestbook(){
 function Venue(){
  const svg='<rect width="440" height="326" fill="#0c2c18"/><path d="M0 190Q70 160 110 215T190 326H0Z" fill="#0b3b3a" opacity=".8"/><g stroke="#d9b873" fill="none" stroke-linecap="round" opacity=".38"><path d="M130 0L170 326M250 0L290 326M330 0L370 326" stroke-width="3"/><path d="M0 70L440 40M0 150L440 120M60 250L440 215" stroke-width="3"/><path d="M200 0L240 326M0 110L440 80M90 300L440 270" stroke-width="6"/></g><path d="M250 198c-14-18-20-27-20-37a20 20 0 0 1 40 0c0 10-6 19-20 37z" fill="#e04b3f"/><circle cx="250" cy="161" r="7" fill="#f5ecd8"/><text x="250" y="222" fill="#f1dba6" font-size="13" text-anchor="middle">'+C.venue+'</text>';
  return h("div",{className:"venue"},
-  h("h2",null,"Wedding Reception Venue"),h("div",null,C.venue),h("div",null,C.address),
+  h("h2",null,"Wedding Reception Venue"),h("div",null,C.venue),h("div",{style:{fontStyle:"italic",color:"var(--gold2)"}},C.hall),h("div",null,C.address),
   h("a",{className:"map",href:C.map,target:"_blank",rel:"noopener","aria-label":"Open the venue in Google Maps"},
    h("svg",{viewBox:"0 0 440 326",preserveAspectRatio:"xMidYMid slice","aria-hidden":true,dangerouslySetInnerHTML:{__html:svg}}),
-   h("div",{className:"chip"},h("b",null,C.venue),C.address,h("div",null,"View on Google Maps"))),
+   h("div",{className:"chip"},h("b",null,C.venue),C.hall,h("br"),C.address,h("div",null,"View on Google Maps"))),
   h("a",{className:"dir",href:C.directions,target:"_blank",rel:"noopener"},"\u27A4 Get directions"))}
 function Calendar(){
  const d=new Date(C.date),y=d.getFullYear(),m=d.getMonth(),day=d.getDate(),off=(new Date(y,m,1).getDay()+6)%7,n=new Date(y,m+1,0).getDate();
@@ -92,8 +92,7 @@ function App(){
    h(Divider),h("h2",null,"Join us"),
    h("div",{className:"info"},
     h("div",null,h("b",null,"WHEN"),h("div",{className:"big"},C.dateText),h("div",null,C.timeText)),
-    h("div",null,h("b",null,"WHERE"),h("div",{className:"big"},C.venue),h("div",null,C.address),h("a",{href:C.map,target:"_blank",rel:"noopener",style:{color:"var(--gold)",display:"inline-block",marginTop:"8px"}},"Open in Google Maps")),
-    h("p",{style:{fontStyle:"italic"}},C.note)))),
+    h("div",null,h("b",null,"WHERE"),h("div",{className:"big"},C.venue),h("div",{style:{fontStyle:"italic",color:"var(--gold2)"}},C.hall),h("div",null,C.address),h("a",{href:C.map,target:"_blank",rel:"noopener",style:{color:"var(--gold)",display:"inline-block",marginTop:"8px"}},"Open in Google Maps"))))),
   h("section",{className:"sec"},h(Reveal,null,h(Divider),h(Venue))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Counting the days"),h(Countdown),h(Calendar))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Guestbook"),h(Guestbook)))))}
 
 export default App;
