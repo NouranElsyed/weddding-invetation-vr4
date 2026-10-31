@@ -1,4 +1,4 @@
-# Wedding Invitation – Reham & Abdelrahman
+# Wedding Invitation – Abdelrahman & Reham
 
 React + Vite.
 
