@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useRef} from "react";
 import {C} from "./config";
 import FRAME from "./assets/frame.webp";
+import FRAMEP from "./assets/frame-portrait.webp";
 import DIV from "./assets/divider.webp";
 import MUSIC from "./assets/music.mp3";
 const h=React.createElement;
@@ -59,9 +60,9 @@ function Calendar(){
    c===day&&h("svg",{viewBox:"0 0 24 24","aria-hidden":true,dangerouslySetInnerHTML:{__html:heart}}),c&&h("b",null,c)))))}
 function Music(){
  const a=useRef(),[on,setOn]=useState(false);
- const play=()=>{const el=a.current;if(!el)return;el.volume=0;el.play().then(()=>{setOn(true);let v=0;const i=setInterval(()=>{v=Math.min(.7,v+.05);el.volume=v;if(v>=.7)clearInterval(i)},120)}).catch(()=>{})};
- useEffect(()=>{const ev=["pointerdown","keydown","touchstart"];const rm=()=>ev.forEach(e=>window.removeEventListener(e,f));
-  function f(e){if(e.target.closest&&e.target.closest(".mus"))return;rm();play()}
+ const play=()=>{const el=a.current;if(!el)return Promise.resolve(false);try{el.volume=0}catch(x){}return el.play().then(()=>{setOn(true);let v=0;const i=setInterval(()=>{v=Math.min(.7,v+.05);try{el.volume=v}catch(x){}if(v>=.7)clearInterval(i)},120);return true}).catch(()=>false)};
+ useEffect(()=>{const ev=["click","touchend","keydown"];const rm=()=>ev.forEach(e=>window.removeEventListener(e,f));
+  function f(e){if(e.target.closest&&e.target.closest(".mus"))return;play().then(ok=>{if(ok)rm()})}
   ev.forEach(e=>window.addEventListener(e,f));return rm},[]);
  const toggle=()=>{if(on){a.current.pause();setOn(false)}else play()};
  return h("div",null,h("audio",{ref:a,src:MUSIC,loop:true,preload:"auto"}),
@@ -80,7 +81,7 @@ function App(){
  const[st,setSt]=useState(0);return h(React.Fragment,null,h(Music),st<2&&h(Intro,{st,onOpen:()=>{setSt(1);setTimeout(()=>setSt(2),2200)}}),st>0&&h("main",null,h(Petals),
   h("section",{className:"sec"},
    h("p",{className:"std"},"SAVE THE DATE"),
-   h("div",{className:"card"},h("img",{src:FRAME,alt:""}),
+   h("div",{className:"card"},h("img",{src:FRAMEP,alt:"",className:"fp"}),h("img",{src:FRAME,alt:"",className:"fl"}),
     h("div",{className:"names"},
      h("div",{className:"nm"},h(Letters,{text:C.groom,delay:1.4})),
      h("div",{className:"amp"},"&"),
@@ -93,7 +94,6 @@ function App(){
     h("div",null,h("b",null,"WHEN"),h("div",{className:"big"},C.dateText),h("div",null,C.timeText)),
     h("div",null,h("b",null,"WHERE"),h("div",{className:"big"},C.venue),h("div",null,C.address),h("a",{href:C.map,target:"_blank",rel:"noopener",style:{color:"var(--gold)",display:"inline-block",marginTop:"8px"}},"Open in Google Maps")),
     h("p",{style:{fontStyle:"italic"}},C.note)))),
-  h("section",{className:"sec"},h(Reveal,null,h(Divider),h(Venue))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Counting the days"),h(Countdown),h(Calendar),
-   h("button",{className:"btn",onClick:rsvp},"Confirm attendance"))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Guestbook"),h(Guestbook)))))}
+  h("section",{className:"sec"},h(Reveal,null,h(Divider),h(Venue))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Counting the days"),h(Countdown),h(Calendar))),h("section",{className:"sec"},h(Reveal,null,h(Divider),h("h2",null,"Guestbook"),h(Guestbook)))))}
 
 export default App;
